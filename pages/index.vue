@@ -10,27 +10,17 @@
           </v-row>
       </v-parallax>
     </v-flex>
-    <v-flex xs12 md12>
-      <v-tabs background-color="green accent-3" center-active centered dark>
-        <v-tab>One</v-tab>
-        <v-tab>Two</v-tab>
-        <v-tab>Three</v-tab>
-        <v-tab>Four</v-tab>
-        <v-tab>Five</v-tab>
-        <v-tab>Six</v-tab>
-        <v-tab>Seven</v-tab>
-      </v-tabs>
-    </v-flex>
+    <CoreToolbar />
     <v-flex xs12 md9>
-      <p class="text-center display-3 font-weight-bold green--text text--accent-3"> Skils</p>
+      <p id="skill_title" class="text-center display-3 font-weight-bold green--text text--accent-3"> Skills</p>
       <v-img src="/skill.png"></v-img>
-      <p class="text-center display-2 font-weight-bold green--text text--accent-3"> HP作成から画像認識まで</p>
+      <!-- <p class="text-center display-2 font-weight-bold green--text text--accent-3"> HP作成から画像認識まで</p>
       <p class="text-center display-2 font-weight-bold green--text text--accent-3"> Web系を中心にいろいろ触れます！</p>
-      <p class="text-center display-1 font-weight-bold green--text text--accent-3"> 気軽にご相談ください！</p>
+      <p class="text-center display-1 font-weight-bold green--text text--accent-3"> 気軽にご相談ください！</p> -->
     </v-flex>
     <v-flex xs12 md12>
       <v-divider></v-divider>
-      <p class="text-center display-3 font-weight-bold green--text text--accent-3"> Works</p>
+      <p id="works_title" class="text-center display-3 font-weight-bold green--text text--accent-3"> Works</p>
       <PostPreview :posts="posts"></PostPreview>
       <p class="text-center display-1 font-weight-bold green--text text--accent-3"> もっと見る</p>
     </v-flex>
@@ -39,10 +29,13 @@
 </template>
 
 <script>
+import CoreToolbar from '~/components/Toolbar.vue'
 import PostPreview from '~/components/PostPreview.vue'
+
 export default {
 	components:{
-		PostPreview
+    CoreToolbar,
+    PostPreview
 	},
 	asyncData(env){
 		console.log(env.app)
@@ -75,7 +68,9 @@ export default {
     titleDescAnim1: false,
     titleDescAnim2: false,
     titleDescAnim3: false,
-	})
+  }),
+  methods: {
+  }
 }
 </script>
 
@@ -90,5 +85,11 @@ export default {
 }
 .title_description{
   color: #FFF;/*文字色*/
+}
+#toolbar{
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+  z-index: 3;
 }
 </style>

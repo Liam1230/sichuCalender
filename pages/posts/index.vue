@@ -1,7 +1,7 @@
 <template>
   <div class="section">
     <div class="columns is-multiline">
-      <div class="column is-half" v-for="post in posts">
+      <div class="column is-half" v-for="post in posts" :key="post">
         <div class="card">
           <header class="card-header">
             <p class="card-header-title">
@@ -27,9 +27,9 @@
 </template>
 
 <script>
-  import {createClient} from '~/plugins/contentful.js'
+  import contentful from '~/plugins/contentful.js'
 
-  const client = createClient()
+  const client = contentful.createClient()
   export default {
     head: {
       title: 'Post'

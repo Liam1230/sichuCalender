@@ -31,7 +31,8 @@ export default {
   */
   plugins: [
     '@/plugins/contentful',
-    '@/plugins/scroll.js'
+    '@/plugins/scroll.js',
+    '@/plugins/vue-scrollto.js'
   ],
   /*
   ** Nuxt.js dev-modules
