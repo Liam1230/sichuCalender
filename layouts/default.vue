@@ -7,7 +7,7 @@
       :fixed="fixed"
       app
     >
-      <span>&copy; 2019</span>
+      <span>&copy; 2019 DaichiKinoshita</span>
     </v-footer>
   </v-app>
 </template>

@@ -7,14 +7,14 @@
                         <span class="py-0 px-2 news-caption caption font-weight-bold grey--text text--darken-1" color="#a7a9af">{{( new Date(post.fields.publishDate)).toDateString()}}</span>
                     </v-flex>
                     <v-flex xs11 md11 class="my-0 py-0">
-                        <v-img class="news-img" :src=post.fields.heroImage.fields.file.url></v-img>
+                        <v-img class="news-img" :src=post.fields.topimage.fields.file.url></v-img>
                     </v-flex>                    
                     <v-flex xs12 md12 class="my-0 py-0">
                         <v-flex xs12 md12 text-xs-left class="mt-0 mb-2 py-0 headline font-weight-black black--text text--darken-1">
                             {{post.fields.title}}
                         </v-flex>
                         <v-flex xs12 md12 text-xs-left class="my-0 py-0 body-2 grey--text text--darken-1">
-                            {{post.fields.description}}
+                            {{post.fields.descript}}
                         </v-flex>
                     </v-flex>
                 </v-layout>
@@ -27,12 +27,12 @@
 import { promised } from 'q';
 export default {
     mounted: function(){
-        console.log(this.post)
+        //console.log(this.post)
     },
     props: ['post'],
     computed: {
         getColor: function () {
-            let col = "#B9F6CA";
+            let col = "#E1F5FE";
 
             if(this.color == "yellow"){
                 col = "#eaec8c";
