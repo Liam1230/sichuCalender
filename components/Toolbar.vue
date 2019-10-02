@@ -1,7 +1,6 @@
 <template>
   <v-tabs class="v-toolbar" background-color="light-blue lighten-2" center-active centered dark :class="{'sticky': position > 0}">
     <!-- <v-tab v-scroll-to="'#business_title'">Business</v-tab> -->
-    <v-tab to="/inspire"> Business</v-tab>
     <v-tab v-scroll-to="'#works_title'">Works</v-tab>
     <v-tab v-scroll-to="'#access_title'">Access</v-tab>
   </v-tabs>
