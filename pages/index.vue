@@ -1,6 +1,13 @@
 <template>
 <v-container fill-height fill-width fluid grid-list-xl>
 	<v-layout justify-center row wrap>
+		<v-dialog v-model="isLoading" fullscreen full-width>
+            <v-container fluid fill-height style="background-color: rgba(255, 255, 255, 0.5);">
+                <v-layout justify-center align-center>
+                    <v-progress-circular indeterminate color="primary"></v-progress-circular>
+                </v-layout>
+            </v-container>
+        </v-dialog>
 		<v-flex xs12 md12>
 			<v-card>
 				<v-card-text>
@@ -11,11 +18,12 @@
 				<v-card-actions>
 					<v-btn v-on:click="showPreview()">プレビュー</v-btn>
 					<v-btn v-on:click="downloadCanvas()">ダウンロード</v-btn>
+					<v-btn v-on:click="downloadYearCanvas()">一年分ダウンロード</v-btn>
 				</v-card-actions>
 			</v-card>
 			<v-card dark>
 				<v-layout class="justify-center my-5">
-					<canvas id="preview" class="my-5" width="583" height="827"></canvas>
+					<canvas id="preview" class="my-5" width="1748" height="2480"></canvas>
 				</v-layout>
 			</v-card>
 		</v-flex>
@@ -45,25 +53,28 @@ class Vector2{
 	}
 }
 
-const YEAR_POS = new Vector2(245,120);
-const MONTH_EN_POS = new Vector2(290,147);
-const MONTH_POS = new Vector2(265,90);
+const canvasWidth = 1748
+const canvasHeight = 2480
+const scale = 3;
+const YEAR_POS = new Vector2(245 * scale,120 * scale);
+const MONTH_EN_POS = new Vector2(290 * scale,147 * scale);
+const MONTH_POS = new Vector2(265 * scale,90 * scale);
 
-const PIC_POS = new Vector2(10,10);
-const HYOU_POS = new Vector2(360,35);
+const PIC_POS = new Vector2(10 * scale,10 * scale);
+const HYOU_POS = new Vector2(360 * scale,35 * scale);
 
-const WEEKFRAME_OFFSET = new Vector2(0,-30)
+const WEEKFRAME_OFFSET = new Vector2(0,-30 * scale)
 
-const FRAME_LU = new Vector2(30,200);
-const FRAME_LD = new Vector2(30,800);
-const FRAME_RD = new Vector2(550,800);
-const FRAME_RU = new Vector2(550,200);
+const FRAME_LU = new Vector2(30 * scale,200 * scale);
+const FRAME_LD = new Vector2(30 * scale,800 * scale);
+const FRAME_RD = new Vector2(550 * scale,800 * scale);
+const FRAME_RU = new Vector2(550 * scale,200 * scale);
 
-const WEEK_OFFSET = new Vector2(12,-7);
-const DAY_OFFSET = new Vector2(5,25);
-const KANSHI_OFFSET = new Vector2(5,55);
-const UNSEI_OFFSET = new Vector2(33,20);
-const ICON_OFFSET = new Vector2(40,35);
+const WEEK_OFFSET = new Vector2(12 * scale,-7 * scale);
+const DAY_OFFSET = new Vector2(5 * scale,25 * scale);
+const KANSHI_OFFSET = new Vector2(5 * scale,55 * scale);
+const UNSEI_OFFSET = new Vector2(33 * scale,20 * scale);
+const ICON_OFFSET = new Vector2(40 * scale,35 * scale);
 
 const ROKUJU_KANSHI = [
 		'甲子','乙丑','丙寅','丁卯','戊辰','己巳','庚午','辛未','壬申','癸酉','甲戌','乙亥',
@@ -148,38 +159,74 @@ export default {
 	},
 	mounted: function(){
 		for(var i=0; i < 12; i++){
-			this.topImgs.push(new Image())
-			this.topImgs[i].src = `/${i+1}.png`;
+			var tmpImg = new Image()
+			tmpImg.src = `/${i+1}.png`;
+			this.loadCnt++
+			tmpImg.onload = function(){
+				console.log("test")
+				this.loadCnt--
+			}.bind(this)
+			this.topImgs.push(tmpImg)
 		}
+
+		this.displayImg.src = "/display.png";
+		this.loadCnt++
+		this.displayImg.onload = function() {
+			console.log("displayImgDone")
+			this.loadCnt--
+		}.bind(this)
+
+		this.noteImg.src = "/memo.png";
+		this.loadCnt++
+		this.noteImg.onload = function() {
+			console.log("noteImgDone")
+			this.loadCnt--
+		}.bind(this)
+		
 		this.listImg.src = "/kanshi_hyou.png";
+		this.loadCnt++
 		this.listImg.onload = function() {
-			//console.log("listImgDone")
-		}
+			console.log("listImgDone")
+			this.loadCnt--
+		}.bind(this)
+		
 		this.tentyusatsuImg.src = "/tentyu.png";
+		this.loadCnt++
 		this.tentyusatsuImg.onload = function() {
-			//console.log("tentyusatsuImgDone")
-		}
+			console.log("tentyusatsuImgDone")
+			this.loadCnt--
+		}.bind(this)
 		this.maruImg.src = "/maru.png";
+		this.loadCnt++
 		this.maruImg.onload = function() {
-			//console.log("maruImgDone")
-		}
+			console.log("maruImgDone")
+			this.loadCnt--
+		}.bind(this)
 		this.batsuImg.src = "/batsu.png";
+		this.loadCnt++
 		this.batsuImg.onload = function() {
-			//console.log("batsuImgDone")
-		}
+			console.log("batsuImgDone")
+			this.loadCnt--
+		}.bind(this)
 		this.nijuImg.src = "/niju.png"
+		this.loadCnt++
 		this.nijuImg.onload = function() {
-			//console.log("nijuImgDone")
-		}
+			console.log("nijuImgDone")
+			this.loadCnt--
+		}.bind(this)
 		this.hanaImg.src = "/hana.png"
+		this.loadCnt++
 		this.hanaImg.onload = function() {
-			//console.log("hanaImgDone")
-		}
+			console.log("hanaImgDone")
+			this.loadCnt--
+		}.bind(this)
 	},
 	data: ()=>({
 		loadCnt: 0,
 		position:0,
 		topImgs: [],
+		displayImg: new Image(),
+		noteImg: new Image(),
 		listImg: new Image(),
 		tentyusatsuImg: new Image(),
 		maruImg: new Image(),
@@ -190,13 +237,52 @@ export default {
 		paterns: [1, 2,3,4,5,6,7,8,9,10,11,12],
 		selectPatern: 1,
 	}),
+	computed:{
+		isLoading: function(){
+			if(this.loadCnt <= 0) return false
+			return true
+		}
+	},
 	methods: {
+		downloadYearCanvas: function(){
+			let canvas = document.getElementById('preview')
+			var pdf = new jsPDF();
+			var width = pdf.internal.pageSize.width;
+
+			var date = new Date(this.picker)
+			if (canvas.getContext) {
+				var context = canvas.getContext('2d');
+			}
+
+			//ノートのページを追加
+			context.fillStyle = "rgb(255,255,255)";
+			context.fillRect(0,0,canvasWidth,canvasHeight);
+			context.drawImage(this.noteImg, 0, 0, canvasWidth, canvasHeight);
+			var imgData = canvas.toDataURL("image/jpeg");
+			pdf.addImage(imgData, 'JPEG', 0, 0,width,0);
+
+			for(var i = 0; i < 12; i++){
+				pdf.addPage();
+				var tmpDate = new Date(date.getFullYear()+"-"+ String(i+1))
+				this.DrawTemplate(context,tmpDate);
+
+				var imgData = canvas.toDataURL("image/jpeg");
+				pdf.addImage(imgData, 'JPEG', 0, 0,width,0);
+			}
+			pdf.save(date.getFullYear() + "_"+ String(this.selectPatern) + ".pdf");			
+		},
 		downloadCanvas: function(){
 			let canvas = document.getElementById('preview')
-			let link = document.getElementById('hiddenLink')
-			link.href = canvas.toDataURL()
-
-			link.click()
+			//let link = document.getElementById('hiddenLink')
+			//link.href = canvas.toDataURL()
+			var imgData = canvas.toDataURL("image/jpeg");
+			var pdf = new jsPDF();
+			var width = pdf.internal.pageSize.width;
+			pdf.addImage(imgData, 'JPEG', 0, 0,width,0);
+			
+			//var download = document.getElementById('download');
+			pdf.save("download.pdf");
+			//link.click()
 		},
 		showPreview: function(){
 			//ここで描画の処理
@@ -216,27 +302,30 @@ export default {
 			var tmp_x = (FRAME_RD.x - FRAME_LD.x)/7;
 			
 			cont.fillStyle = "rgb(255,255,255)";
-			cont.fillRect(0,0,890,840);
-			cont.lineWidth = 2;
+			cont.fillRect(0,0,890 * scale,840 * scale);
+			cont.lineWidth = 2 * scale;
 			cont.fillStyle = "#000";
 			const monthfontsLength = month.toString().length;
 
-			cont.font = '90px "YuMincho"';
+			var fontsize = 90  * scale;
+			cont.font = `${fontsize}px "YuMincho"`;
 			if(monthfontsLength == 2){
-				cont.fillText( month.toString(), MONTH_POS.x - 40, MONTH_POS.y);
+				cont.fillText( month.toString(), MONTH_POS.x - 40 * scale, MONTH_POS.y);
 			}else{
 				cont.fillText( month.toString(), MONTH_POS.x, MONTH_POS.y);
 			}
 			
-			cont.font = "30px 'YuMincho'";
+			fontsize = 30 * scale;
+			cont.font = `${fontsize}px 'YuMincho'`;
 			cont.fillText( year.toString(), YEAR_POS.x, YEAR_POS.y);
 			
-			cont.font = "25px 'YuMincho'";
+			fontsize = 25 * scale;
+			cont.font = `${fontsize}px 'YuMincho'`;
 			var monthtextfontsLength = MONTH_EN[month-1].length;
-			cont.fillText( MONTH_EN[month-1], MONTH_EN_POS.x - (monthtextfontsLength * 8), MONTH_EN_POS.y);
+			cont.fillText( MONTH_EN[month-1], MONTH_EN_POS.x - (monthtextfontsLength * 8 * scale), MONTH_EN_POS.y);
 							
-			cont.drawImage(this.topImgs[month-1], PIC_POS.x, PIC_POS.y,205,154);
-			cont.drawImage(this.listImg, HYOU_POS.x, HYOU_POS.y,200,100);
+			cont.drawImage(this.topImgs[month-1], PIC_POS.x, PIC_POS.y,205 * scale,154 * scale);
+			cont.drawImage(this.listImg, HYOU_POS.x, HYOU_POS.y,200 * scale,100 * scale);
 			
 			var weekdayData = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
 
@@ -278,7 +367,8 @@ export default {
 				// 	cont.fillStyle = "#000";
 				// }
 				cont.fillStyle = "#FFF";
-				cont.font = "23px 'Hiragino Maru Gothic ProN'";
+				fontsize = 23 * scale;
+				cont.font = `${fontsize}px 'Hiragino Maru Gothic ProN'`;
 				cont.fillText(weekdayData[i], FRAME_LU.x + WEEK_OFFSET.x + i * tmp_x, FRAME_LU.y + WEEK_OFFSET.y);
 			}
 			
@@ -355,44 +445,47 @@ export default {
 				}else{
 					cont.fillStyle = "#000";
 				}
-				cont.font = "21px 'YuMincho'";
+				fontsize = 21 * scale
+				cont.font = `${fontsize}px 'YuMincho'`;
 				cont.fillText(Cdata[i]['day'], lu_pos.x + DAY_OFFSET.x, lu_pos.y + DAY_OFFSET.y);
 				
 				//干支の描画
 				cont.fillStyle = "#000";
-				cont.font = "13px 'Hiragino Maru Gothic ProN'";
+				fontsize = 13 * scale
+				cont.font = `${fontsize}px 'Hiragino Maru Gothic ProN'`;
 				var kanshi = get_kanshi(new Date(year,month-1,Cdata[i]['day']));
 				cont.fillText(kanshi, lu_pos.x + KANSHI_OFFSET.x, lu_pos.y + KANSHI_OFFSET.y);
 				
 				cont.fillStyle = "#000";
-				cont.font = "11px 'Hiragino Maru Gothic ProN'";
+				fontsize = 11 * scale
+				cont.font = `${fontsize}px 'Hiragino Maru Gothic ProN'`;
 				var unsei = get_unsei(new Date(year,month-1,Cdata[i]['day']), this.selectPatern);
 				//console.log(UNSEI[unsei].length)
 				if(UNSEI[unsei].length == 2){
-					cont.fillText(UNSEI[unsei], lu_pos.x + UNSEI_OFFSET.x + 6, lu_pos.y + UNSEI_OFFSET.y);
+					cont.fillText(UNSEI[unsei], lu_pos.x + UNSEI_OFFSET.x + 6 * scale, lu_pos.y + UNSEI_OFFSET.y);
 				}else{
 					cont.fillText(UNSEI[unsei], lu_pos.x + UNSEI_OFFSET.x, lu_pos.y + UNSEI_OFFSET.y);
 				}
 				
 				if(unsei == 0 || unsei == 1 || unsei == 2){
 					//ハナマル
-					cont.drawImage(this.hanaImg, lu_pos.x+ICON_OFFSET.x, lu_pos.y+ICON_OFFSET.y,25,25);
+					cont.drawImage(this.hanaImg, lu_pos.x+ICON_OFFSET.x, lu_pos.y+ICON_OFFSET.y,25 * scale,25 * scale);
 				}else if(unsei == 3 || unsei == 4 || unsei == 5){
 					//天中殺
-					cont.drawImage(this.tentyusatsuImg, lu_pos.x+ICON_OFFSET.x-9, lu_pos.y+ICON_OFFSET.y + 3,45,22);
+					cont.drawImage(this.tentyusatsuImg, lu_pos.x+ICON_OFFSET.x-9 * scale, lu_pos.y+ICON_OFFSET.y + 3,45 * scale,22 * scale);
 				}else if(unsei == 6 || unsei == 7 || unsei == 8){
 					//マル
-					cont.drawImage(this.maruImg, lu_pos.x+ICON_OFFSET.x, lu_pos.y+ICON_OFFSET.y,20,20);
+					cont.drawImage(this.maruImg, lu_pos.x+ICON_OFFSET.x, lu_pos.y+ICON_OFFSET.y,20 * scale,20 * scale);
 				}else if (unsei == 9){
 					//バツ
-					cont.drawImage(this.batsuImg, lu_pos.x+ICON_OFFSET.x+5, lu_pos.y+ICON_OFFSET.y+7,13,13);
+					cont.drawImage(this.batsuImg, lu_pos.x+ICON_OFFSET.x+5 * scale, lu_pos.y+ICON_OFFSET.y+7 * scale,13 * scale,13 * scale);
 				}else if(unsei == 10){
 					//二重丸
-					cont.drawImage(this.nijuImg, lu_pos.x+ICON_OFFSET.x, lu_pos.y+ICON_OFFSET.y,20,20);
+					cont.drawImage(this.nijuImg, lu_pos.x+ICON_OFFSET.x, lu_pos.y+ICON_OFFSET.y,20 * scale,20 * scale);
 				}else if(unsei == 11){
 					//バツバツ
-					cont.drawImage(this.batsuImg, lu_pos.x+ICON_OFFSET.x, lu_pos.y+ICON_OFFSET.y+7,13,13);
-					cont.drawImage(this.batsuImg, lu_pos.x+ICON_OFFSET.x+13, lu_pos.y+ICON_OFFSET.y+7,13,13);
+					cont.drawImage(this.batsuImg, lu_pos.x+ICON_OFFSET.x, lu_pos.y+ICON_OFFSET.y+7 * scale,13 * scale,13 * scale);
+					cont.drawImage(this.batsuImg, lu_pos.x+ICON_OFFSET.x+13 * scale, lu_pos.y+ICON_OFFSET.y+7 * scale,13 * scale,13 * scale);
 				}
 				
 				if(Cdata[i]['weekday'] >= 6){

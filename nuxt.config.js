@@ -15,6 +15,9 @@ export default {
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
+    ],
+    script: [
+      {src: '//cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.3/jspdf.min.js'}
     ]
   },
   /*
