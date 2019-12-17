@@ -491,19 +491,19 @@ export default {
 				
 				if(unsei == 0 || unsei == 1 || unsei == 2){
 					//ハナマル
-					cont.drawImage(this.hanaImg, lu_pos.x+ICON_OFFSET[idx].x, lu_pos.y+ICON_OFFSET[idx].y,25 * scale,25 * scale);
+					cont.drawImage(this.hanaImg, lu_pos.x+ICON_OFFSET[idx].x, lu_pos.y+ICON_OFFSET[idx].y + 10,25 * scale,25 * scale);
 				}else if(unsei == 3 || unsei == 4 || unsei == 5){
 					//天中殺
-					cont.drawImage(this.tentyusatsuImg, lu_pos.x+ICON_OFFSET[idx].x-9 * scale, lu_pos.y+ICON_OFFSET[idx].y + 3,45 * scale,22 * scale);
+					cont.drawImage(this.tentyusatsuImg, lu_pos.x+ICON_OFFSET[idx].x-9 * scale, lu_pos.y+ICON_OFFSET[idx].y + 16,45 * scale,22 * scale);
 				}else if(unsei == 6 || unsei == 7 || unsei == 8){
 					//マル
-					cont.drawImage(this.maruImg, lu_pos.x+ICON_OFFSET[idx].x, lu_pos.y+ICON_OFFSET[idx].y,20 * scale,20 * scale);
+					cont.drawImage(this.maruImg, lu_pos.x+ICON_OFFSET[idx].x, lu_pos.y+ICON_OFFSET[idx].y + 15,20 * scale,20 * scale);
 				}else if (unsei == 9){
 					//バツ
 					cont.drawImage(this.batsuImg, lu_pos.x+ICON_OFFSET[idx].x+5 * scale, lu_pos.y+ICON_OFFSET[idx].y+7 * scale,13 * scale,13 * scale);
 				}else if(unsei == 10){
 					//二重丸
-					cont.drawImage(this.nijuImg, lu_pos.x+ICON_OFFSET[idx].x, lu_pos.y+ICON_OFFSET[idx].y,20 * scale,20 * scale);
+					cont.drawImage(this.nijuImg, lu_pos.x+ICON_OFFSET[idx].x, lu_pos.y+ICON_OFFSET[idx].y + 15,20 * scale,20 * scale);
 				}else if(unsei == 11){
 					//バツバツ
 					cont.drawImage(this.batsuImg, lu_pos.x+ICON_OFFSET[idx].x, lu_pos.y+ICON_OFFSET[idx].y+7 * scale,13 * scale,13 * scale);
