@@ -262,7 +262,6 @@ export default {
 
 			let canvas = document.getElementById(canvasid)
 
-			
 			var pdf = new jsPDF(option);
 			var width = pdf.internal.pageSize.width;
 			console.log(width)
@@ -272,12 +271,17 @@ export default {
 				var context = canvas.getContext('2d');
 			}
 
+			//表紙を入れる
+
+			
 			//ノートのページを追加
-			context.fillStyle = "rgb(255,255,255)";
-			context.fillRect(0,0,canvasWidth[idx],canvasHeight[idx]);
-			context.drawImage(this.noteImg, 0, 0, canvasWidth[idx], canvasHeight[idx]);
-			var imgData = canvas.toDataURL("image/jpeg");
-			pdf.addImage(imgData, 'JPEG', 0, 0,width,0);
+			if(idx == 0){
+				context.fillStyle = "rgb(255,255,255)";
+				context.fillRect(0,0,canvasWidth[idx],canvasHeight[idx]);
+				context.drawImage(this.noteImg, 0, 0, canvasWidth[idx], canvasHeight[idx]);
+				var imgData = canvas.toDataURL("image/jpeg");
+				pdf.addImage(imgData, 'JPEG', 0, 0,width,0);
+			}	
 
 			for(var i = 0; i < 12; i++){
 				pdf.addPage();
